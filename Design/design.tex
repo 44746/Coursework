@@ -1,0 +1,320 @@
+\chapter{Design}
+
+
+\section{Overall System Design}
+
+\subsection{Short description of the main parts of the system}
+\begin{itemize}
+\item Home
+This system will display the buttons required to access the rest of the program and exit the program
+\item Match
+This system will display the details of a all the past matches that have been entered into the system. 
+\item Player 
+This system  will display all the details that have been entered by the user on an individual player.  
+\item Team Sheet
+This system will display the selected players in the selected formation, it will also have the substitutes listed to one side of the screen. The user will also be able to swap players in and out of the team sheet. Once the one user is happy with the team sheet they will be able to save it to the database for future reference. 
+\item Goals
+This system will display a list of goals from all past games that have been entered into the system, it will include bas details such as the scorer, the match it was scored in and the quantity.
+\item Squad
+This system will display a list of all the players in the squad table.
+\item Add Player
+This system will ask for the user to input the basic details of a new player, such as name and position. These details will all be entered into text boxes.
+\item Add Goals
+This system will ask for the user to select the match and goal scorer from a drop down menu, The user will then have to enter the quantity scored by the selected player in the selected game. 
+\item Add Match
+This system will ask for the user to input the basic details of a recent match, such as the result and the opposition.
+
+\end{itemize}
+\section{User Interface Designs}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{HomeUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{SquadListUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{MatchListUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{GoalListUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{addPlayerUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{addMatchUifTxt}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{addGoalUifTxt}
+\end{figure}
+\section{Hardware Specification}
+The system will need to run on a desktop computer, a laptop and on a tablet. It will need to run on the computers at 1360x768, in a 16:9 aspect ratio screen as well the IPad's 1024x768-pixel display, in a 4:3 aspect ratio. A keyboard will be needed for input as well as a pointer device to navigate around the system. A display will be used for the output of the program. The data for the program will be held on a hard drive.
+\section{Program Structure}
+
+\subsection{Top-down design structure charts}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{mainFC}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{squadFc}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{MatchFc}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{goalsFc}
+\end{figure}
+\subsection{Algorithms in pseudo-code for each data transformation process}
+FUNCTION PopulateMatchComboBox(self)
+	matches <- CONNECT to  Matches Databse
+	FOR match in matches DO
+		self.matchCombo.addItem(match[2])
+	END FOR
+	END FUNCTION
+
+FUNCTION PopulatePlayerComboBox(self)
+	players <- CONNECT to Players Database
+	FOR player in players DO
+		self.playerCombo.addItem(player[2])
+	END FOR
+END FUNCTION
+
+FUNCTION refreshTable(self)
+	Goals <- CONNECT to Goals Database
+	self.table.setRowCount(len(Goals))
+	self.table.setColumnCount(4)
+	row <- -1
+	FOR Goal in Goals DO
+		column <- 0
+		row <- row+1
+		FOR field in Goal DO
+			self.table.setItem(row, column, QTableWidgetItem(str(field)))
+			column <- column +1
+		END FOR
+	END FOR
+END FUNCTION
+ 
+FUNCTION btnAddPushed(self)
+	forename <-self.forename.text()
+	surname <-self.surname.text()
+	rating <-int(self.rating.text())
+	email <- self.email.text()
+	position <- self.position.text()
+	avaliable <- self.avaliable.text()
+	gDatabase.AddPlayer(forename, surname, rating, email, position, avaliable)
+	self.parent.show()
+	self.parent.refreshTable()
+	self.close()
+END FUNCTION
+
+\subsection{Object Diagrams}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{objectDiagram}
+\end{figure}
+
+\subsection{Class Definitions}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{classdef}
+\end{figure}
+
+\section{Prototyping}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{HomePT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{TeamSheetPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{SquadPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{AddPlayerPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{MatchPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{AddMatchPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{GoalsPT}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=150mm]{AddGoalPT}	
+\end{figure}
+
+\section{Definition of Data Requirements}
+
+\subsection{Identification of all data input items}
+\begin{itemize}
+\item Player first name
+\item Player second name
+\item Player rating
+\item Player email
+\item Player position
+\item Player availability
+\item Match Date
+\item Match opposition
+\item Match result
+\item Goal Quantity 
+
+\end{itemize}
+
+\subsection{Identification of all data output items}
+\begin{itemize}
+\item team sheet
+\item New goal
+\item Goal table
+\item Player table
+\item Match table
+\end{itemize}
+\subsection{Explanation of how data output items are generated}
+\begin{itemize}
+\item The team sheet will be generated by the user selecting players from the player table. The player data will have been previously entered by the user and stored in a global database. To select the players, the player table will need to be used. Again the data in this table will come from the global database.  
+\item The new goal will display data in drop down boxes for the user to select from. This will be data that the user has previously entered into the system. It will be stored in a global database. 
+\item The goal table will be generated by taking the data that the user has previously input, now stored in a global database and displaying it in a table format for the user to see. The user will also be given the option to add more data to the table.
+\item The Player table will display all the player details from the "new player" window. The data will be user entered and stored in a global database.
+\item The match table will generate its data from the global database. The data will be put in columns so that it is easily readable to the user. The data will have been previously entered by the user based on the recent match that had been played.  
+\end{itemize}
+
+\subsection{Data Dictionary}
+\begin{table}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|l|l|} 
+\hline
+Name            & Data Type & Length   & Validation                    & Example Data    & Comment                        \\ \hline
+PlayerID        & Integer   & 3 Digits & 3 Digits, Must exist          & 123             & Unique to each player          \\ \hline
+PlayerForename  & String    & 15 Chars & Minimum of 3 digits           & Harry           & First name, capital first char \\ \hline
+PlayerSurname   & String    & 20 Chars & Minimum of 3 digits           & West            & Surname, capital first char    \\ \hline
+PlayerPosition  & String    & 2 Chars  & Must be 2 chars               & GK              & In caps                        \\ \hline
+PlayerRating    & Integer   & 2 Digits & Maximum of 2 digits           & 8               & Most likely to only be 1 digit \\ \hline
+PlayerEmail     & String    & 50 Chars & Must have an @                & Hwest@gmail.com & Contact for the player         \\ \hline
+MatchID         & Integer   & 3 Digits & 3 digits, must exist          & 869             & Unique to match                \\ \hline
+MatchDate       & String    & 8 Chars  & Must exist                    & 23/09/14        & Date of the match              \\ \hline
+MatchResult     & String    & 1 Chars  & Must exist                    & W               & W=Win, L=lose, D=Draw          \\ \hline
+MatchOpposition & String    & 20 Chars & Minimum of 3 digits           & Milton          & Opposition name                \\ \hline
+GoalQuantity    & Integer   & 2 Digits & At least one digit must exist & 2               & 99\% will only be one digit    \\ \hline
+\end{tabular}
+}
+\end{table}
+\subsection{Identification of appropriate storage media}
+Because my system will only need to be accessed by one computer and one portable device the database file can be stored on a hard drive and copied across when required. If the client chooses to use the system on a portable device they would need to transfer the database file across. No data would need to be added/deleted from the portable device. This would all be done from the main computer. Therefore the files would never need transferring back to the main computer from the portable device. This means the files on the portable device would only need to be readable. The client has no personal server for which the files can be stored on. Therefore the database file will need to be easily accessible on the main computers hard drive so that the user can easily copy them across to the portable device when they are needed. 
+\section{Database Design}
+
+\subsection{Normalisation}
+\begin{table}[]
+\centering
+\caption{My caption}
+\label{my-label}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+UNF & 1NF & 2NF & 3NF \\ \hline
+\begin{tabular}[c]{@{}l@{}}PlayerID\\ forename\\ surname\\ rating\\ email\\ position\\ avaliable\\ MatchID\\ date\\ opposition\\ result\\ GoalID\\ opposition\\ forname\\ quantity\end{tabular} & \begin{tabular}[c]{@{}l@{}}PlayerID\\  forename \\ surname \\ rating \\ email \\ position \\ avaliable\\ \\ MatchID\\ date\\ opposition\\ result\\ \\ GoalID\\ opposition\\ forname\\ quantity\end{tabular} & \begin{tabular}[c]{@{}l@{}}PlayerID \\ forename \\ surname \\ rating \\ email\\ position \\ avaliable\\ \\ MatchID\\ date\\ opposition\\ result\\ \\ GoalID\\ opposition\\ forname\\ quantity\end{tabular} & \begin{tabular}[c]{@{}l@{}}PlayerID \\ forename \\ surname \\ rating \\ email \\ position \\ avaliable\\ \\ MatchID\\ date\\ opposition\\ result\\ \\ GoalID\\ opposition\\ forname\\ quantity\end{tabular} \\ \hline
+\end{tabular}
+}
+\end{table}
+
+
+\subsubsection{ER Diagrams}
+\begin{figure}[H]
+	\includegraphics{ER}
+\end{figure}
+
+\subsubsection{Entity Descriptions}
+Player( {\ul PlayerID},PlayerForename,PlayerSurname,PlayerRating,PlayerEmail,PlayerPosition,PlayerAvailable)
+Match({\ul MatchID},MatchDate,MatchResult,MatchOpposition)
+Goals(MatchID,PlayerID,GoalQuantity)
+\subsubsection{1NF to 3NF}
+
+\subsection{SQL Queries}
+\begin{table}[]
+	\centering
+	\caption{My caption}
+	\label{my-label}
+	\begin{tabular}{ll}
+		SQL Statement                                                                                                                                                                                                                      & Description                                                                                                                                                                                                                               \\
+		\begin{tabular}[c]{@{}l@{}}"""create table if not exists Player,\\ (PlayerID integer,\\ forename text,\\ surname text,\\ rating integer,\\ email text,\\ position text,\\ available text,\\ primary Key(PlayerID))"""\end{tabular} & This is an example of an SQL statement that creates a new table called Player, with the attributes Forename, Surname, Rating, Email, Position and Available. The primary key is set to PlayerID.                                          \\
+		"insert into Goal(GoalID,opposition,forename,quantity) values ((SELECT max(GoalID) FROM Goal)+1,'\{0\}', '\{1\}', '\{2\}')".format(opposition,forename,quantity)                                                                   & This is an example of an SQL statement to add records to the database. In this case, it is entering a new goal record with the attributes opposition, forename,quantity. The GoalID attribute is being generated in the SELECT statement. \\
+		SELECT max(GoalID) FROM Goal)+1                                                                                                                                                                                                    & This is an example of an SQL statement that generates an ID, it selects the max from a field in a record and adds 1 to it. This is used within the entering of a record into the database.                                               
+	\end{tabular}
+\end{table}
+\section{Security and Integrity of the System and Data}
+There is a very limited amount of data on the system that needs to be secure. This is the email addresses. The program will only be handed out to certain individuals on wont be available for on line download. The people that are handed the software are authorized to see the data. If they wish to install the data on a shared computer, e.g a home pc, then the data does not need protecting as it will be available on the email application that the client uses. Therefore no extra personal data is being stored with in the system. The data will also be entered by an authorized user and therefore will have already been seen. 
+
+\subsection{Security and Integrity of Data}
+There is a very limited amount of data on the system that needs to be secure. This is the email addresses. The program will only be handed out to certain individuals and wont be available for on line download. The people that are handed the software are authorized to see the data. The system will require a password when it is booted up. This means that only authorized individuals can access the system.  
+
+\subsection{System Security}
+The system will have a password entry to stop any unauthorized users entering the system. This protects the email addresses stored on the system. If the system wasn't secure then the system would be prone to these email addresses being stolen, This would be breach the data protection act 1998. 
+
+\section{Validation}
+\begin{table}[]
+\label{my-label}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+Item & Example & Validation Method & Comments \\ \hline
+Player Forname & George & \begin{tabular}[c]{@{}l@{}}Format check,\\  Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains letters\\ and that something has been entered.\end{tabular} \\ \hline
+Player Surname & West & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains letters \\ and that something has been entered.\end{tabular} \\ \hline
+Player Rating & 8 & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check, \\ Range check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check that it contains only integers\\  and that something has been entered. \\ Will also have to be between 1-10 inclusive.\end{tabular} \\ \hline
+Player Email & gw@gmail.com & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it has an "@" \\ and that something has been entered.\end{tabular} \\ \hline
+Player Positon & ST & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains letters \\ and that something has been entered.\end{tabular} \\ \hline
+Player Avaliable & Y & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains a letter \\ and that something has been entered.\end{tabular} \\ \hline
+Match Date & 11/11/15 & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check that it contains no letters \\ and that something has been entered.\end{tabular} \\ \hline
+Match Oppositon & Milton & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains letters \\ and that something has been entered.\end{tabular} \\ \hline
+Match Result & W & \begin{tabular}[c]{@{}l@{}}Format check, \\ Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains a letter \\ and that something has been entered.\end{tabular} \\ \hline
+Goal Quantity & 2 & \begin{tabular}[c]{@{}l@{}}Format check,\\  Presence check\end{tabular} & \begin{tabular}[c]{@{}l@{}}To check it only contains integers\\  and that something has been entered.\end{tabular} \\ \hline
+\end{tabular}
+}
+\end{table}
+
+\section{Testing}
+
+\begin{table}[]
+\label{my-label}
+\begin{longtable}{|p{1cm}|p{2.5cm}|p{2.5cm}|p{1.5cm}|p{1.5cm}|p{2cm}|p{1cm}|p{1cm}|}
+
+\hline
+Test Series and Number & Purpose & Description & Test Data & Test Data Type & Expected Result & Actual Result & Evidence in Appendix \\ \hline
+1.01 & Test the "Team Sheet" button on the main menu functions correctly & Test the "Team Sheet" button links to the "Team Sheet" window and closes the Main Menu window & Click the "Team Sheet" button & Normal & Team Sheet window opens and main menu closes. &  &  \\ \hline
+1.02 & Test the "Squad" button,on the main menu functions correctly & Test the "Squad" button links to the "Squad" window and closes the Main Menu window & Click the "Squad" button & Normal & Squad window opens and main menu closes. &  &  \\ \hline
+1.03 & Test the "Match" button,on the main menu functions correctly & Test the "Match" button links to the "Match" window and closes the Main Menu window & Click the "Match" button & Normal & Match window opens and main menu closes. &  &  \\ \hline
+1.04 & Test the "Goals" button,on the main menu functions correctly & Test the "Goals" button links to the "Goals" window and closes the Main Menu window & Click the "Goals button & Normal & Goals window opens and main menu closes. &  &  \\ \hline
+1.05 & Test the "Exit" button,on the main menu functions correctly & Test the "Exit" button exits the program and closes the Main Menu window & Click the "Exit" button & Normal & The program closes. &  &  \\ \hline
+1.06 & Test the "New Player" button in the Squad screen functions correctly & Test the "New player" button links to the Add Player window and closes the Squad screen & Click the "New Player" button & Normal & Add Player window opens and the Squad Window Closes &  &  \\ \hline
+1.07 & Test the "Home" button in the Squad screen functions correctly & Test the "Home" button links to the Main Menu window and closes the Sqaud screen & Click the "Home" button & Normal & Main Menu window opens and the Squad window closes &  &  \\ \hline
+1.08 & Test the "Add" button in the Add Player window functions correctly & Test the "Add" button closes the Add Player window and re opens the Squad window & Click the "Add" button & Normal & Add Player window closes and Squad window reopens &  &  \\ \hline
+1.09 & Test the "Cancel" button in the Add Player window functions correctly & Test the "Cancel" button closes the Add Player window and re opens the Squad Window & Click the "Cancel" button & Normal & Add Player window closes and Squad window reopens &  &  \\ \hline
+1.1 & Test the "New Match" button in the Match screen functions correctly & Test the "New Match" button links to the Add Match window and closes the MatchList screen & Click the "New Match" & Normal & Add Match window opens and the Match List Window Closes &  &  \\ \hline
+1.11 & Test the "Home" button in the Match screen functions correctly & Test the "Home" button links to the Main Menu window and closes the MatchList screen & Click the "Home" button & Normal & Main Menu window opens and the MatchList window closes &  &  \\ \hline
+1.12 & Test the "Add" button in the Add Match window functions correctly & Test the "Add" button closes the Add Match window and re opens the Match List window & Click the "Add" button & Normal & Add Match window closes and Math List window reopens &  &  \\ \hline
+1.13 & Test the "Cancel" button in the Add Match window functions correctly & Test the "Cancel" button closes the Add Match window and re opens the Match List Window & Click the "Cancel" button & Normal & Add Match window closes and Match List window reopens &  &  \\ \hline
+1.14 & Test the "New Goal" button in the Goal List screen functions correctly & Test the "New Goal" button links to the Add Goal window and closes the GoalList screen & Click the "New Goal" button & Normal & Add Goal window opens and the Goal List Window Closes &  &  \\ \hline
+1.15 & Test the "Home" button in the Goal List screen functions correctly & Test the "Home" button links to the Main Menu window and closes the Goal List screen & Click the "Home" button & Normal & Main Menu window opens the Goal List Window Closes &  &  \\ \hline
+1.16 & Test the "Add" button in the Add Goal window functions correctly & Test the "Add" button closes the Add Goal window and re opens the Goal List window & Click the "Add" button & Normal & Add Goal window closes and Goal List window reopens &  &  \\ \hline
+1.17 & Test the "Cancel" button in the Add Goal window functions correctly & Test the "Cancel" button closes the Add Goal window and re opens the Goal List window & Click the "Cancel" button & Normal & Add Goal window closes and Goal List window reopens &  &  \\ \hline
+2.01 & Verify a Forename was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}Nothing,\\ George\end{tabular} & \begin{tabular}[c]{@{}l@{}}Erroneous,\\ Normal\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.02 & Verify a Surname was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}Nothing ,\\ West\end{tabular} & \begin{tabular}[c]{@{}l@{}}Erroneous,\\ Normal\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.03 & Verify a Rating was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}5,\\ George,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous,\\ Boundary\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.04 & Verify a Email was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}gw@gmail.com,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.05 & Verify a Positon was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}GK,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.06 & Verify a Avaliability was entered in the Add Player window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}Y,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.07 & Verify a Date was entered in the Add Match window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}11/11/15,\\ George,\\ 1/12/01\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous,\\ Boundary\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.08 & Verify a Opposition was entered in the Add Match window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}Milton,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.09 & Verify a Result was entered in the Add Match window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}W,\\ 10\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.1 & Verify a Player was selected in the Add Goal window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}West,\\ Nothing\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.11 & Verify a Match was selected in the Add Goal window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}Milton,\\ Nothing\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+2.12 & Verify a Quantity was entered in the Add Goal window & Error should appear if the input box is left empty & \begin{tabular}[c]{@{}l@{}}2,\\ 1,\\ George\end{tabular} & \begin{tabular}[c]{@{}l@{}}Normal,\\ Boundary,\\ Erroneous\end{tabular} & Error message appears if the box is left empty prompting the user to enter the requiered data &  &  \\ \hline
+3.01 & Verify that all the Player details are stored in the Player database & All of the information should be added to the correct fields in the Player table. & Player information & Normal & Added to the Player table &  &  \\ \hline
+3.02 & Verify that all the Match details are stored in the Match database & All of the information should be added to the correct fields in the Match table. & Match information & Normal & Added to the Match table &  &  \\ \hline
+3.03 & Verify that all the Goal details are stored in the Goal databse & All of the information should be added to the correct fields in the Goal table. & Goal information & Normal & Added to the Goal table &  &  \\ \hline
+4.01 & Verify the Player data is displaying under the correct header in the Squad table & \begin{tabular}[c]{@{}l@{}}All of the information should be \\ under the correct header in the Player table.\end{tabular} & Player information & Normal & Data is displayed under the correct header &  &  \\ \hline
+4.02 & Verify the Match data is displaying under the correct header in the Match table & All of the information should be under the correct header in the Match table. & Match information & Normal & Data is displayed under the correct header &  &  \\ \hline
+4.03 & Verify the Goal data is displaying under the correct header in the Goal table & All of the information should be under the correct header in the Goal table. & Goal information & Normal & Data is displayed under the correct header &  &  \\ \hline
+4.04 & Verify the Player Surname is displayed in the correct drop down box & Player Surname should be displayed in the drop down box labelled Player & Player Surnames & Normal & Player Surname is displayed in the drop down box labelled Player &  &  \\ \hline
+4.05 & Verify the Match Opposition is displayed in the correct drop down box & Match Oppositon should be displayed in the drop down box labelled Match & Match Opposiotions & Normal & Match Oppositon is displayed in the drop down box labelled Match &  &  \\ \hline
+5 & Verify the program fulfils the clients specification & Run through the program, testing the different aspects to make sure they fit the objectives in the clients specification & Enter some test data and run through the program & Normal & The program fulfils the clients &  &  \\ \hline
+\end{longtable}
+\end{table}
